@@ -2,12 +2,13 @@
 
 prefix      = @prefix@
 exec_prefix = @exec_prefix@
+datarootdir = @datarootdir@
 
 PREFIX      = @prefix@
-MANDIR      = @mandir@
+MANDIR      = $(DESTDIR)/@mandir@
 INSTALL	    = @INSTALL@
-BINDIR	    = @bindir@
-ETCDIR	    = @sysconfdir@
+BINDIR	    = $(DESTDIR)/@bindir@
+ETCDIR	    = $(DESTDIR)/@sysconfdir@
 INSTALL_DIR = ${INSTALL} -m 0755 -d
 INSTALL_PROG = ${INSTALL} -s -m 0755 
 INSTALL_DATA = ${INSTALL} -m 0644
