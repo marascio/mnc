@@ -1,0 +1,47 @@
+
+dnl Process this file with autoconf to produce a configure script.
+
+dnl Initialise. This can be passed any old file. 
+AC_INIT(mnc_main.c)
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_CANONICAL_HOST
+
+dnl
+dnl if the user hasn't specified CFLAGS, then
+dnl   if compiler is gcc, then use -O2 and some warning flags
+dnl   else use os-specific flags or -O
+dnl
+
+if test -n "$GCC"; then
+	CFLAGS="-O2 -Wall -pedantic"
+else
+	case "$host_os" in
+		*hpux*)  CFLAGS=" +O3"                      ;;
+		*ultrix* | *osf*) CFLAGS=" -O -Olimit 2000" ;;
+		*)       CFLAGS=" -O" ;;
+	esac
+fi
+
+dnl
+dnl Linux has broken Multicast headers
+dnl
+case "$host_os" in
+	*linux*) CFLAGS="$CFLAGS -DLINUX=1" ;;
+esac
+
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+
+dnl Checks for libraries.
+
+dnl Checks for header files.
+AC_HEADER_STDC
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+
+dnl Make any macro substitutions that we ought to. 
+
+AC_OUTPUT(Makefile)

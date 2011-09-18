@@ -1,0 +1,58 @@
+# Makefile mnc
+
+prefix      = @prefix@
+exec_prefix = @exec_prefix@
+
+PREFIX      = @prefix@
+MANDIR      = @mandir@
+INSTALL	    = @INSTALL@
+BINDIR	    = @bindir@
+ETCDIR	    = @sysconfdir@
+INSTALL_DIR = ${INSTALL} -m 0755 -d
+INSTALL_PROG = ${INSTALL} -s -m 0755 
+INSTALL_DATA = ${INSTALL} -m 0644
+
+CC = @CC@
+@SET_MAKE@
+
+DEBUG =   #-g -D_DEBUG
+INCLUDE = -I. -I/usr/local/include  
+CFLAGS = @CFLAGS@ ${DEBUG} ${INCLUDE}
+
+BINARY = mnc
+OBJECTS = mnc_main.o mnc_opts.o mnc_multicast.o mnc_error.o
+
+all: ${BINARY} Makefile
+
+${BINARY}: ${OBJECTS}
+	${CC} ${CFLAGS} -o ${BINARY} ${OBJECTS} 
+
+mnc_main.o: mnc_main.c mnc.h
+	${CC} ${CFLAGS} -c mnc_main.c
+	
+mnc_opts.o: mnc_opts.c mnc.h
+	${CC} ${CFLAGS} -c mnc_opts.c
+
+mnc_multicast.o: mnc_multicast.c mnc.h
+	${CC} ${CFLAGS} -c mnc_multicast.c
+
+mnc_error.o: mnc_error.c mnc.h
+	${CC} ${CFLAGS} -c mnc_error.c
+
+install: mkcat 
+	$(INSTALL_DIR) ${BINDIR}
+	$(INSTALL_PROG) ${BINARY} ${BINDIR}
+
+mkcat:
+	$(INSTALL_DIR) ${MANDIR}/man1
+	$(INSTALL_DATA) doc/${BINARY}.1 ${MANDIR}/man1/
+
+deinstall:
+	rm -f ${MANDIR}/man1/${BINARY}.1
+	rm -f ${BINDIR}/${BINARY}
+clean: 
+	rm -f *.o ${BINARY} 
+
+distclean: clean
+	rm -rf Makefile config.h config.log config.status config.cache tags \
+	       autom4te.cache
