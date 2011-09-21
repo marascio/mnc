@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 	/* Utility variables */
 	int				sock,
 					len;
-	char				buffer[1024];
+	char			buffer[4096];
 
 	/* Our main configuration */
 	struct mnc_configuration *	config;
